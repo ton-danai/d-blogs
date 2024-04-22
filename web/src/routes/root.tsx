@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
 
 const user = {
   email: "tom@example.com",
@@ -38,9 +38,9 @@ export default function Root() {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.href}
                             className={classNames(
                               checkMatchRouter(item.href)
                                 ? "bg-indigo-900 text-white"
@@ -52,7 +52,7 @@ export default function Root() {
                             }
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -114,8 +114,8 @@ export default function Root() {
                   {navigation.map((item) => (
                     <Disclosure.Button
                       key={item.name}
-                      as="a"
-                      href={item.href}
+                      as={Link}
+                      to={item.href}
                       className={classNames(
                         checkMatchRouter(item.href)
                           ? "bg-indigo-900 text-white"

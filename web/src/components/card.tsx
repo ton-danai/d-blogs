@@ -1,6 +1,8 @@
+import { PostStatusEnums } from "../utils/enums";
+
 export interface ICard {
   title: string;
-  status: string;
+  status: PostStatusEnums;
   content: string;
   category: string;
   author: string;
