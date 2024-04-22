@@ -6,8 +6,10 @@ import { Outlet, useLocation } from "react-router-dom";
 const user = {
   email: "tom@example.com",
 };
-const navigation = [{ name: "Activities", href: "/" }];
-
+const navigation = [
+  { name: "Activities", href: "/" },
+  { name: "My Posts", href: "/myposts" },
+];
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -15,7 +17,10 @@ function classNames(...classes: string[]) {
 export default function Root() {
   const location = useLocation();
   const checkMatchRouter = (href: string) => {
-    return location.pathname.includes(href);
+    if (location.pathname === href) return true;
+    if (location.pathname.length > 1 && href.length === 1) return false;
+
+    return location.pathname.startsWith(href);
   };
 
   return (
@@ -24,7 +29,7 @@ export default function Root() {
         <Disclosure as="nav" className="bg-indigo-800">
           {({ open }) => (
             <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto  px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 text-4xl text-white ">
@@ -152,7 +157,7 @@ export default function Root() {
           )}
         </Disclosure>
         <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto px-2 py-6 sm:px-6 lg:px-8">
             <Outlet />
           </div>
         </main>
