@@ -1,7 +1,8 @@
-import { IMyPostCard } from "../components/mypostCard";
+import IBlogForm from "../interfaces/IBlogForm";
+import IMyBlogCard from "../interfaces/IMyBlogCard";
 import { PostStatusEnums } from "../utils/enums";
 
-const myPosts: IMyPostCard[] = [
+const myPosts: IMyBlogCard[] = [
   {
     id: 1,
     title: "test1 asdwdasd asdaws asdjlkjklj kljkljlk jlkj lkjlkj",
@@ -11,7 +12,7 @@ const myPosts: IMyPostCard[] = [
   },
 ];
 
-const getMyPosts = async (): Promise<IMyPostCard[]> => {
+const getMyBlogs = async (): Promise<IMyBlogCard[]> => {
   return await new Promise((resolve) => {
     setTimeout(() => {
       resolve(myPosts);
@@ -19,6 +20,22 @@ const getMyPosts = async (): Promise<IMyPostCard[]> => {
   });
 };
 
+const addBlogs = async (model: IBlogForm): Promise<void> => {
+  return await new Promise((resolve) => {
+    setTimeout(() => {
+      myPosts.push({
+        id: 2,
+        title: model.title,
+        status: model.status,
+        category: model.categoryId.toString(),
+        publicationDate: null,
+      });
+      resolve();
+    }, 3000);
+  });
+};
+
 export default {
-  getMyPosts,
+  getMyBlogs,
+  addBlogs,
 };

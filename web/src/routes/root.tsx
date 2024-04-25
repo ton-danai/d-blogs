@@ -8,7 +8,7 @@ const user = {
 };
 const navigation = [
   { name: "Activities", href: "/" },
-  { name: "My Posts", href: "/myposts" },
+  { name: "My Blogs", href: "/myblogs" },
 ];
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
