@@ -7,7 +7,7 @@ import { PostsModule } from './models/posts/posts.module';
 import { UsersModule } from './models/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { User } from './users/user.entity';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
