@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import blogsService from "../services/blogsService";
+import postService from "../services/postService";
 import MyPostCard from "../components/mypostCard";
-import IMyBlogCard from "../interfaces/IMyBlogCard";
+import IMyPostCard from "../interfaces/IMyPostCard";
 import { useNavigate } from "react-router-dom";
 
 export default function MyPosts() {
   const navigate = useNavigate();
 
-  const [posts, setPosts] = useState<IMyBlogCard[]>([]);
+  const [posts, setPosts] = useState<IMyPostCard[]>([]);
 
   useEffect(() => {
-    const getMyblogs = async () => {
-      const items: IMyBlogCard[] = await blogsService.getMyBlogs();
+    const getMyPosts = async () => {
+      const items: IMyPostCard[] = await postService.getMyPosts();
       setPosts(items);
     };
 
-    getMyblogs();
+    getMyPosts();
   }, []);
 
   return (
@@ -24,10 +24,10 @@ export default function MyPosts() {
       <button
         type="button"
         className="px-4 h-10 w-fit border rounded-md text-white hover:bg-indigo-300 bg-indigo-600 flex items-center justify-center cursor-pointer"
-        onClick={() => navigate("/myblogs/new")}
+        onClick={() => navigate("/myposts/new")}
       >
         <PlusIcon className="block h-6 w-6 mr-2" aria-hidden="true" />
-        New Blog
+        NEW POST
       </button>
 
       <div className="flex">

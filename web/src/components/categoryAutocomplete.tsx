@@ -39,8 +39,7 @@ export default function CategoryAutocomplete({ value, onChange }: ICateDDL) {
       const obj = source.find((e) => e.id === value);
       setSelected(obj);
     }
-  }, [value]);
-
+  }, [value, source]);
   if (isLoading) {
     return <Loading />;
   } else {

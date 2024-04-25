@@ -1,38 +1,82 @@
-import { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import Switch from "../../components/statusSwitch";
-import CategoryAutocomplete from "../../components/categoryAutocomplete";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { PostStatusEnums } from "../../utils/enums";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import IForm from "../../interfaces/IBlogForm";
-import blogsService from "../../services/blogsService";
-import { useLoadingDispatch } from "../../context/LoadingContext";
+import IPostModel from "../interfaces/IPostModel";
+import { PostStatusEnums } from "../utils/enums";
+import CategoryAutocomplete from "./categoryAutocomplete";
+import Switch from "./statusSwitch";
+import { useLoadingDispatch } from "../context/LoadingContext";
+import { useMessageModalDispatch } from "../context/MessageModalContext";
+import postsService from "../services/postService";
 
-export default function NewPost() {
+interface IPostModelTemp {
+  mode: "ADD" | "EDIT";
+  id?: number;
+}
+
+export default function PostForm(props: IPostModelTemp) {
   const dispatch = useLoadingDispatch();
+  const dispatchMsgModal = useMessageModalDispatch();
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({} as IForm);
-  const [state, setState] = useState<IForm>({
+  const [errors, setErrors] = useState({} as IPostModel);
+  const [state, setState] = useState<IPostModel>({
     title: "",
     content: "",
     status: PostStatusEnums.DRAFT,
     categoryId: null,
   });
 
-  const setStatus = (newValue: PostStatusEnums) => {
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    const initForm = () => {
+      if (props.mode === "EDIT" && props.id) {
+        try {
+          dispatch({ type: "loading-on" });
+          postsService.getPostById(props.id).then((data) => {
+            setState({ ...data, content: "" });
+            setContent(data.content);
+            dispatch({ type: "loading-off" });
+          });
+        } catch (e) {
+          dispatchMsgModal({
+            type: "show",
+            payload: {
+              header: "Erorr on loading",
+              detail: "Something went wrong.",
+              btnText: "OK",
+              onClick: () => {
+                navigate("/myposts");
+              },
+            },
+          });
+        }
+      }
+    };
+
+    initForm();
+  }, []);
+
+  const removeErrorByKey = (key) => {
+    const errs = { ...errors };
+    delete errs[key];
+    setErrors(errs);
+  };
+
+  const setStatus = (newValue: PostStatusEnums): void => {
     setState({ ...state, status: newValue });
   };
 
   const validateState = () => {
     let valid = true;
-    const errorData = {} as IForm;
+    const errorData = {} as IPostModel;
     if (!state.title) {
       errorData.title = "Title is required.";
     }
 
-    if (!state.content) {
+    if (!content) {
       errorData.content = "Content is required.";
     }
 
@@ -49,22 +93,62 @@ export default function NewPost() {
     const canSubmit = validateState();
 
     if (canSubmit) {
-      console.log("canSubmit", canSubmit);
-      dispatch({ type: "loading-on" });
       try {
-        await blogsService.addBlogs(state);
+        dispatch({ type: "loading-on" });
+        if (props.mode === "ADD") {
+          await onSubmitAdd();
+        }
+
+        if (props.mode === "EDIT") {
+          await onSubmitEdit();
+        }
+
         dispatch({ type: "loading-off" });
       } catch (e) {
         dispatch({ type: "loading-off" });
-        console.log(e);
+        dispatchMsgModal({
+          type: "show",
+          payload: {
+            header: "Create post unsuccessful!",
+            detail: "Something went wrong.",
+            btnText: "OK",
+            onClick: () => {},
+          },
+        });
       }
     }
   };
 
-  const removeErrorByKey = (key) => {
-    const errs = { ...errors };
-    delete errs[key];
-    setErrors(errs);
+  const onSubmitAdd = async () => {
+    const model = { ...state, content: content };
+    await postsService.add(model);
+    dispatchMsgModal({
+      type: "show",
+      payload: {
+        header: "Create post successful",
+        detail: "Your post has been successfully created.",
+        btnText: "Got it, Thanks!",
+        onClick: () => {
+          navigate("/myposts");
+        },
+      },
+    });
+  };
+
+  const onSubmitEdit = async () => {
+    const model = { ...state, content: content };
+    await postsService.edit(props.id, model);
+    dispatchMsgModal({
+      type: "show",
+      payload: {
+        header: "Edit post successful",
+        detail: "Your post has been successfully edited.",
+        btnText: "Got it, Thanks!",
+        onClick: () => {
+          navigate("/myposts");
+        },
+      },
+    });
   };
 
   return (
@@ -74,8 +158,8 @@ export default function NewPost() {
           <ArrowLeftIcon
             className="w-5 h-5 mr-4 cursor-pointer"
             onClick={() => navigate(-1)}
-          />{" "}
-          New Post
+          />
+          {props.mode} POST
         </h1>
         <div className="mb-4">
           <label
@@ -110,18 +194,16 @@ export default function NewPost() {
           <CKEditor
             id="editor"
             editor={ClassicEditor}
-            data={state.content}
+            data={content}
             onReady={(editor) => {
               editor.editing.view.change((writer) => {
                 const viewEditableRoot = editor.editing.view.document.getRoot();
                 if (viewEditableRoot)
                   writer.setStyle("height", "300px", viewEditableRoot);
               });
-              // You can store the "editor" and use when it is needed.
-              console.log("Editor is ready to use!", editor);
             }}
             onChange={(_, editor) => {
-              setState({ ...state, content: editor.getData() });
+              setContent(editor.getData());
               removeErrorByKey("content");
             }}
           />
