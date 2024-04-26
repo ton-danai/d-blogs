@@ -8,6 +8,9 @@ import { UsersModule } from './models/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
+import { Post } from './entities/post.entity';
+import { Category } from './entities/category.entity';
+import { MasterdataModule } from './models/masterdata/masterdata.module';
 
 @Module({
   imports: [
@@ -18,12 +21,13 @@ import { User } from './entities/user.entity';
       username: 'postgres',
       password: 'sertis',
       database: 'postgres',
-      entities: [User],
+      entities: [User, Post, Category],
       synchronize: false,
     }),
     AuthModule,
     PostsModule,
     UsersModule,
+    MasterdataModule,
   ],
   controllers: [AppController],
   providers: [

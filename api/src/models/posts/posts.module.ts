@@ -3,9 +3,11 @@ import { PostsService } from './posts.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PostsController } from './posts.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Post } from 'src/entities/post.entity';
 
 @Module({
-  imports: [],
+  imports: [TypeOrmModule.forFeature([Post])],
   controllers: [PostsController],
   providers: [
     PostsService,
