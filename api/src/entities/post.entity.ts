@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Category } from './category.entity';
 
 @Entity({ name: 'posts' })
 export class Post {
@@ -18,14 +25,18 @@ export class Post {
   status: string;
 
   @Column()
-  author: string;
+  author?: string;
 
   @Column()
-  publish_date?: Date;
+  publish_date?: Date | null | undefined;
 
   @Column()
   create_at?: Date;
 
   @Column()
   update_at?: Date;
+
+  @OneToOne(() => Category)
+  @JoinColumn({ name: 'category_id' })
+  category?: Category;
 }

@@ -10,6 +10,7 @@ import Switch from "./statusSwitch";
 import { useLoadingDispatch } from "../context/LoadingContext";
 import { useMessageModalDispatch } from "../context/MessageModalContext";
 import postsService from "../services/postService";
+import { useUser } from "../context/UserContext";
 
 interface IPostModelTemp {
   mode: "ADD" | "EDIT";
@@ -25,21 +26,26 @@ export default function PostForm(props: IPostModelTemp) {
     title: "",
     content: "",
     status: PostStatusEnums.DRAFT,
-    categoryId: null,
+    category_id: null,
   });
 
   const [content, setContent] = useState("");
-
+  const user = useUser();
   useEffect(() => {
-    const initForm = () => {
+    if (!user.email) {
+      navigate("/");
+    }
+
+    const initForm = async () => {
       if (props.mode === "EDIT" && props.id) {
         try {
           dispatch({ type: "loading-on" });
-          postsService.getPostById(props.id).then((data) => {
-            setState({ ...data, content: "" });
-            setContent(data.content);
-            dispatch({ type: "loading-off" });
-          });
+          const data = await postsService.getPostById(props.id);
+          if (!data) navigate("/myposts");
+
+          setState({ ...data, content: "" });
+          setContent(data.content);
+          dispatch({ type: "loading-off" });
         } catch (e) {
           dispatchMsgModal({
             type: "show",
@@ -80,8 +86,8 @@ export default function PostForm(props: IPostModelTemp) {
       errorData.content = "Content is required.";
     }
 
-    if (!state.categoryId) {
-      errorData.categoryId = "Category is required.";
+    if (!state.category_id) {
+      errorData.category_id = "Category is required.";
     }
 
     setErrors(errorData);
@@ -219,11 +225,11 @@ export default function PostForm(props: IPostModelTemp) {
             Category
           </label>
           <CategoryAutocomplete
-            value={state.categoryId}
-            onChange={(data) => setState({ ...state, categoryId: data.id })}
+            value={state.category_id}
+            onChange={(data) => setState({ ...state, category_id: data.id })}
           />
-          {errors.categoryId && (
-            <div className="text-red-600">{errors.categoryId}</div>
+          {errors.category_id && (
+            <div className="text-red-600">{errors.category_id}</div>
           )}
         </div>
         <div className="mb-4 flex justify-between flex-row max-md:flex-col">
