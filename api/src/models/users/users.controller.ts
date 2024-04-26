@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Get,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import UserRegisterDTO from './dto/user.register.dto';
@@ -28,16 +29,16 @@ export class UsersController {
 
       return { userId: userId };
     } catch (e) {
+      console.log(e);
       throw new InternalServerErrorException();
     }
   }
 
-  @Get('/')
-  @Public()
-  async getAll() {
-    const result = await this.usersService.findAll();
+  @Get('/profile')
+  async getProfile(@Req() req: Request) {
+    // const result = await this.usersService.findAll();
     return {
-      data: result,
+      email: req['user'].email,
     };
   }
 }

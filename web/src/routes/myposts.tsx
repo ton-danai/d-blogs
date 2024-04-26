@@ -4,13 +4,19 @@ import postService from "../services/postService";
 import MyPostCard from "../components/mypostCard";
 import IMyPostCard from "../interfaces/IMyPostCard";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 export default function MyPosts() {
   const navigate = useNavigate();
+  const user = useUser();
 
   const [posts, setPosts] = useState<IMyPostCard[]>([]);
 
   useEffect(() => {
+    if (!user.email) {
+      navigate("/");
+    }
+
     const getMyPosts = async () => {
       const items: IMyPostCard[] = await postService.getMyPosts();
       setPosts(items);
