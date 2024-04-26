@@ -33,6 +33,10 @@ export class UsersService {
     }
   }
 
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
   async findById(id: number): Promise<User | undefined> {
     return this.usersRepository.findOneBy({ id });
   }

@@ -5,6 +5,7 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import UserRegisterDTO from './dto/user.register.dto';
@@ -29,5 +30,14 @@ export class UsersController {
     } catch (e) {
       throw new InternalServerErrorException();
     }
+  }
+
+  @Get('/')
+  @Public()
+  async getAll() {
+    const result = await this.usersService.findAll();
+    return {
+      data: result,
+    };
   }
 }
