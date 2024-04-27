@@ -36,9 +36,10 @@ export class UsersController {
 
   @Get('/profile')
   async getProfile(@Req() req: Request) {
-    // const result = await this.usersService.findAll();
+    const result = await this.usersService.getAllLike(req['user'].email);
     return {
       email: req['user'].email,
+      liked_posts: result,
     };
   }
 }

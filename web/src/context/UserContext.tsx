@@ -37,4 +37,5 @@ function loadingReducer(state, action) {
 
 const initial: IUserProfile = {
   email: "",
+  liked_posts: [],
 };

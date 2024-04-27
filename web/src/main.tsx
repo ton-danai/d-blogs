@@ -16,6 +16,7 @@ import Register from "./routes/register";
 import Signin from "./routes/signin";
 
 import "./index.css";
+import PostView from "./routes/postview";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/post/:id",
+        element: <PostView />,
       },
     ],
   },

@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 import { Post } from './entities/post.entity';
 import { Category } from './entities/category.entity';
 import { MasterdataModule } from './models/masterdata/masterdata.module';
+import { Like } from './entities/like.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { MasterdataModule } from './models/masterdata/masterdata.module';
       username: 'postgres',
       password: 'sertis',
       database: 'postgres',
-      entities: [User, Post, Category],
+      entities: [User, Post, Category, Like],
       synchronize: false,
     }),
     AuthModule,

@@ -53,7 +53,7 @@ export default function MyPosts() {
   };
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex justify-center items-center mt-5">
       <div className="max-w-4xl min-w-72 w-full flex flex-col gap-2">
         <button
           type="button"

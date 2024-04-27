@@ -5,9 +5,10 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { PostsController } from './posts.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from 'src/entities/post.entity';
+import { Like } from 'src/entities/like.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post])],
+  imports: [TypeOrmModule.forFeature([Post, Like])],
   controllers: [PostsController],
   providers: [
     PostsService,

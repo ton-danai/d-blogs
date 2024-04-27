@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Category } from './category.entity';
+import { Like } from './like.entity';
 
 @Entity({ name: 'posts' })
 export class Post {
@@ -39,4 +41,7 @@ export class Post {
   @OneToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
   category?: Category;
+
+  @OneToMany(() => Like, (like) => like.post)
+  likes?: Like[];
 }

@@ -6,6 +6,7 @@ import { useUser, useUserDispatch } from "../context/UserContext";
 import Cookies from "universal-cookie";
 import userService from "../services/userService";
 import { useNavigate } from "react-router-dom";
+import IUserProfile from "../interfaces/IUserProfile";
 
 const navigation = [
   { name: "Activities", href: "/", needLogin: false },
@@ -53,7 +54,7 @@ export default function Root() {
     cookies.remove("profile");
     dispatchUser({
       type: "set",
-      payload: { email: "" },
+      payload: { email: "", liked_posts: [] } as IUserProfile,
     });
     navigate("/");
   };
@@ -61,7 +62,7 @@ export default function Root() {
   return (
     <>
       <div className="min-h-full">
-        <Disclosure as="nav" className="bg-indigo-800">
+        <Disclosure as="nav" className="bg-indigo-800 sticky top-0 z-50">
           {({ open }) => (
             <>
               <div className="mx-auto  px-4 sm:px-6 lg:px-8">
@@ -246,7 +247,7 @@ export default function Root() {
           )}
         </Disclosure>
         <main>
-          <div className="mx-auto px-2 py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto px-2 pm-6 pt-0 sm:px-6 lg:px-8 max-md:pt-0">
             {isChecking ? null : <Outlet />}
           </div>
         </main>

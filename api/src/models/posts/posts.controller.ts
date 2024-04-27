@@ -10,6 +10,8 @@ import {
   Param,
   Patch,
   Post,
+  Put,
+  Query,
   Req,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -18,6 +20,7 @@ import UpsertPostDTO from './dto/upsert.post.dto';
 import MyPostDTO from './dto/my.post.dto';
 import PostDTO from './dto/post.dto';
 import { Public } from 'src/auth/auth.decorator';
+import IQuery from './interfaces/IQuery';
 
 @Controller('posts')
 export class PostsController {
@@ -29,6 +32,22 @@ export class PostsController {
     if (!model.status) return false;
     if (!model.category_id) return false;
     return true;
+  }
+
+  @Get('/')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  async getWithQuery(
+    @Query('page') page: number | null,
+    @Query('take') take: number | null,
+  ): Promise<{ data: PostDTO[]; count: number }> {
+    const query: IQuery = {
+      page: page || 1,
+      take: take || 20,
+    };
+
+    const result = await this.postsService.findWithPagination(query);
+    return result;
   }
 
   @Post('/')
@@ -107,5 +126,21 @@ export class PostsController {
     await this.postsService.removeById(id);
 
     return;
+  }
+
+  @Put('/:id/Like')
+  @HttpCode(HttpStatus.OK)
+  async likePost(@Param('id') id: number, @Req() req: Request) {
+    const result = await this.postsService.likePost(req['user'].email, id);
+
+    return result;
+  }
+
+  @Put('/:id/unLike')
+  @HttpCode(HttpStatus.OK)
+  async unlikePost(@Param('id') id: number, @Req() req: Request) {
+    const result = await this.postsService.unlikePost(req['user'].email, id);
+
+    return result;
   }
 }

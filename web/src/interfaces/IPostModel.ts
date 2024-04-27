@@ -5,8 +5,9 @@ export default interface IPostModel {
   title: string;
   category_id: number | null | string;
   category_name?: string;
-  content: string;
+  content?: string;
   status: PostStatusEnums;
   publish_date?: Date | null | undefined;
   author?: string;
+  likes?: number;
 }
