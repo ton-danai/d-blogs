@@ -26,9 +26,15 @@ const edit = async (id: number, model: IPostModel): Promise<void> => {
   await instant.patch(API_URL + "/posts/" + id, model);
 };
 
+const removeById = async (id: number): Promise<void> => {
+  const instant = getInstant();
+  await instant.delete(API_URL + "/posts/" + id);
+};
+
 export default {
   getPostById,
   getMyPosts,
   add,
   edit,
+  removeById,
 };

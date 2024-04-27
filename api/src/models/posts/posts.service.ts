@@ -31,12 +31,14 @@ export class PostsService {
   }
 
   async getMy(author: string): Promise<MyPostDTO[]> {
-    const posts = await this.postRepository.find({
-      relations: ['category'],
-      where: {
-        author: author,
-      },
-    });
+    const posts = await this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.category', 'category')
+      .where('post.author =:author', { author: author })
+      .orderBy('post.publish_date', 'DESC', 'NULLS LAST')
+      .addOrderBy('post.update_at', 'DESC', 'NULLS LAST')
+      .addOrderBy('post.create_at', 'DESC', 'NULLS LAST')
+      .getMany();
 
     const result: MyPostDTO[] = posts.map((data) => {
       return {
@@ -93,5 +95,10 @@ export class PostsService {
     }
 
     await this.postRepository.update(dbPost.id, { ...newData });
+  }
+
+  async removeById(id: number): Promise<void> {
+    const dbPost = await this.postRepository.findOneBy({ id });
+    await this.postRepository.remove(dbPost);
   }
 }

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -89,5 +90,22 @@ export class PostsController {
     const result = await this.postsService.getById(id);
 
     return result;
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.OK)
+  async removeById(
+    @Param('id') id: number,
+    @Req() req: Request,
+  ): Promise<void> {
+    const author = req['user'].email;
+    if (!author) throw new UnauthorizedException();
+
+    const postDB = await this.postsService.getById(id);
+    if (!postDB || postDB.author !== author) throw new BadRequestException();
+
+    await this.postsService.removeById(id);
+
+    return;
   }
 }

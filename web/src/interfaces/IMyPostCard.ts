@@ -6,5 +6,7 @@ export default interface IMyPostCard {
   status: PostStatusEnums;
   category_id: number;
   category_name: string;
-  publicationDate: Date | null;
+  publish_date: Date | null;
+  onClickEdit?: () => void | undefined;
+  onClickDelete?: () => void | undefined;
 }
