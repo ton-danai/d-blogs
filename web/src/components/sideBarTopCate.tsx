@@ -12,7 +12,7 @@ export default function SideBar() {
 
       for (let index = 0; index < 10; index++) {
         items.push(
-          <div key={index} className=" shadow rounded-md p-3  w-full mx-auto">
+          <div key={index} className=" shadow border rounded-md p-3  w-full mx-auto">
             <div className="animate-pulse flex space-x-4">
               <div className="flex-1 space-y-3 py-1">
                 <div className="h-2 bg-slate-200 rounded"></div>
@@ -55,7 +55,7 @@ export default function SideBar() {
           setData(result);
           setIsLoading(false);
         } catch (e) {
-          setIsLoading(false);
+          console.log(e);
         }
       }, 1000);
     }

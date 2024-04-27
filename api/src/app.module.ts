@@ -17,7 +17,7 @@ import { Like } from './entities/like.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: process.env.DB_API || 'localhost',
       port: 5432,
       username: 'postgres',
       password: 'sertis',

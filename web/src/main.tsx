@@ -17,43 +17,47 @@ import Signin from "./routes/signin";
 
 import "./index.css";
 import PostView from "./routes/postview";
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/myposts",
-        element: <MyPosts />,
-      },
-      {
-        path: "/myposts/new",
-        element: <NewPost />,
-      },
-      {
-        path: "/myposts/:id",
-        element: <UpdatePost />,
-      },
-      {
-        path: "/signin",
-        element: <Signin />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/post/:id",
-        element: <PostView />,
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Root />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/myposts",
+          element: <MyPosts />,
+        },
+        {
+          path: "/myposts/new",
+          element: <NewPost />,
+        },
+        {
+          path: "/myposts/:id",
+          element: <UpdatePost />,
+        },
+        {
+          path: "/signin",
+          element: <Signin />,
+        },
+        {
+          path: "/register",
+          element: <Register />,
+        },
+        {
+          path: "/post/:id",
+          element: <PostView />,
+        },
+      ],
+    },
+  ],
+  { basename: "/" }
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <LoadingProvider>

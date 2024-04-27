@@ -74,8 +74,8 @@ export default function Signin() {
   };
 
   return (
-    <div className="w-full flex justify-center items-center">
-      <div className="max-w-md min-w-60 w-full flex justify-center flex-col shadow-lg px-10 py-5  rounded-md border">
+    <div className="w-full flex justify-center items-center mt-10 max-md:mt-2">
+      <div className="max-w-md min-w-60 w-full flex justify-center flex-col shadow-lg px-10 py-5 rounded-md border">
         <h5 className="text-2xl font-bold mb-5">Sign In</h5>
         <div className="mb-4">
           <label

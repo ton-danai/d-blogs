@@ -27,6 +27,7 @@ export default function Register() {
     if (!form.email) {
       errorData.email = "Email is required.";
     } else {
+      // eslint-disable-next-line
       const emailValidate = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
       if (!emailValidate.test(form.email)) {
         errorData.email = "Email is not email.";
@@ -95,7 +96,7 @@ export default function Register() {
   };
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex justify-center items-center mt-10 max-md:mt-2">
       <div className="max-w-md min-w-60 w-full flex justify-center flex-col shadow-lg px-10 py-5  rounded-md border">
         <h5 className="text-2xl font-bold mb-5">Register</h5>
         <div className="mb-4">

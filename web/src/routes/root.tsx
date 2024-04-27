@@ -35,11 +35,15 @@ export default function Root() {
 
     if (access_token) {
       const getProfile = async () => {
-        const data = await userService.getProfile();
-        dispatchUser({
-          type: "set",
-          payload: data,
-        });
+        try {
+          const data = await userService.getProfile();
+          dispatchUser({
+            type: "set",
+            payload: data,
+          });
+        } catch (e) {
+          console.log(e);
+        }
         setIsChecking(false);
       };
 

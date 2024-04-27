@@ -33,13 +33,13 @@ export default function Home() {
   }, []);
 
   const render = () => {
-    return posts.map((post) => <Card {...post} />);
+    return posts.map((post) => <Card key={post.id} {...post} />);
   };
 
   const Loading = () => {
     const result = [];
     for (let index = 0; index < 3; index++) {
-      result.push(<CardLoadig />);
+      result.push(<CardLoadig key={index} />);
     }
     return (
       <div className="flex max-md:flex-col flex-row max-md:flex-wrap gap-2 mt-5 ">
@@ -70,11 +70,6 @@ export default function Home() {
             pullDownToRefreshContent={
               <h3 style={{ textAlign: "center" }}>
                 &#8595; Pull down to refresh
-              </h3>
-            }
-            releaseToRefreshContent={
-              <h3 style={{ textAlign: "center" }}>
-                &#8593; Release to refresh
               </h3>
             }
           >

@@ -6,6 +6,9 @@ services:
     image: postgres:alpine3.19
     restart: always
     shm_size: 128mb
+    networks:
+      dblog_network:
+        ipv4_address: 172.16.0.1
     environment:
       POSTGRES_PASSWORD: sertis
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -13,3 +16,28 @@ services:
       - ./db/data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  api:
+    build: ./api/
+    image: dblogs/api:latest
+    networks:
+      dblog_network:
+        ipv4_address: 172.16.0.2
+    ports:
+      - 3000:3000
+    environment:
+      - DB_API=172.16.0.1
+
+  web:
+    build: ./web/
+    image: dblogs/web:latest
+    ports:
+      - 5173:5173
+
+networks:
+  dblog_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.254
